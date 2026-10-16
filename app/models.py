@@ -122,6 +122,7 @@ class StockMovement(db.Model):
             "quantity": self.quantity,
             "note": self.note,
             "created_by": self.created_by,
+            "created_by_email": self.user.email if self.user else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "product_name": self.product.name if self.product else None
         }

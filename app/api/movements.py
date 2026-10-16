@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from datetime import datetime
+from datetime import datetime, timedelta
 from app.extensions import db
 from app.models import StockMovement, Product
 
@@ -34,7 +34,9 @@ def get_movements():
     if date_to:
         try:
             dt_to = datetime.fromisoformat(date_to)
-            query = query.filter(StockMovement.created_at <= dt_to)
+            # Include the entire end day (up to midnight of the next day)
+            dt_to = dt_to + timedelta(days=1)
+            query = query.filter(StockMovement.created_at < dt_to)
         except ValueError:
             pass
             
